@@ -514,6 +514,13 @@ export class AppUI {
         case 'A':
           this.toggleDrawer();
           break;
+        case 'n':
+        case 'N':
+          a.view.look.neonNotesOn = !a.view.look.neonNotesOn;
+          a.settingsChanged();
+          this.toast(a.view.look.neonNotesOn ? '空間ネオン音符: ON' : '空間ネオン音符: OFF', 1600);
+          if (this.drawer.classList.contains('open') && this.tab === 'light') this.renderDrawer();
+          break;
         case 'm':
         case 'M':
           a.audio.setMuted(!a.audio.muted);
@@ -753,6 +760,11 @@ export class AppUI {
     const cur = STYLES.find((s) => s.id === look.style);
     if (cur) body.appendChild(el('p', 'note', `${cur.blurb} Sキーでスタイルを順に切り替えられます。下のスライダーでさらに微調整できます。`));
 
+    body.appendChild(el('div', 'sec', '空間演出'));
+    const neon = this.sectionToggle(body, '空間ネオン音符 (N)', () => look.neonNotesOn, (v) => (look.neonNotesOn = v));
+    neon([sl('発光の強さ', 0.2, 2, 0.05, () => look.neonNotes, (v) => (look.neonNotes = v))]);
+    this.sectionToggle(body, '舞う和紙楽譜（演奏＆ネオン連動）', () => look.floatingSheetsOn, (v) => (look.floatingSheetsOn = v))([]);
+
     body.appendChild(el('div', 'sec', 'ライティング'));
     sl('窓からの太陽光', 0, 1.8, 0.01, () => L().sun, (v) => a.setLights({ sun: v }));
     sl('太陽の色温度', -1, 1, 0.01, () => L().warmth, (v) => a.setLights({ warmth: v }), (v) => (v < 0 ? `寒色 ${(-v).toFixed(2)}` : v.toFixed(2)));
@@ -788,7 +800,7 @@ export class AppUI {
 
     this.resetButton(body, () => {
       a.setStyle('golden');
-      for (const k of ['aoOn', 'ao', 'reflectionsOn'] as const) (look as unknown as Record<string, unknown>)[k] = DEFAULT_LOOK[k];
+      for (const k of ['aoOn', 'ao', 'reflectionsOn', 'neonNotesOn', 'neonNotes', 'floatingSheetsOn'] as const) (look as unknown as Record<string, unknown>)[k] = DEFAULT_LOOK[k];
     });
   }
 

@@ -280,13 +280,13 @@ export function letteringTexture(maker: string): THREE.Texture {
     g.fillStyle = color;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    g.font = `700 ${Math.round(H * 0.66)}px "Cormorant Garamond", Georgia, "Times New Roman", serif`;
-    (g as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = `${Math.round(H * 0.12)}px`;
-    g.fillText(maker.toUpperCase(), atX(0), H * 0.54);
+    g.font = `700 ${Math.round(H * 0.54)}px "Cormorant Garamond", Georgia, "Times New Roman", serif`;
+    (g as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = `${Math.round(H * 0.08)}px`;
+    g.fillText('MADE BY TSUDA IN 2026', atX(0), H * 0.54);
     g.font = `700 ${Math.round(H * 0.36)}px Georgia, "Times New Roman", serif`;
     (g as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = `${Math.round(H * 0.08)}px`;
-    g.fillText('OVERSTRUNG', atX(-0.4), H * 0.54);
-    g.fillText('FULL IRON FRAME', atX(0.4), H * 0.54);
+    g.fillText(maker.toUpperCase(), atX(-0.44), H * 0.54);
+    g.fillText('FULL IRON FRAME', atX(0.44), H * 0.54);
     // a cast rib under the name
     g.fillRect(atX(-0.16), H * 0.9, atX(0.16) - atX(-0.16), H * 0.05);
   };
@@ -351,7 +351,7 @@ export function decalTexture(maker: string): THREE.Texture {
   g.fillText(maker, W / 2, H * 0.43);
   g.font = `600 ${Math.round(H * 0.12)}px Georgia, "Times New Roman", serif`;
   (g as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = `${Math.round(H * 0.03)}px`;
-  g.fillText('CONCERT UPRIGHT  ·  ESTABLISHED 1887', W / 2, H * 0.72);
+  g.fillText('MADE BY TSUDA IN 2026', W / 2, H * 0.72);
   // flourishes either side of the name
   for (const s of [-1, 1]) {
     g.beginPath();

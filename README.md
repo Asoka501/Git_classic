@@ -6,17 +6,27 @@ MIDIを2本のロボットハンドがリアルタイムに演奏する、3Dピ�
 
 ![The Mechanical Pianist](docs/images/mechanical-pianist-header.jpg)
 
-## 収録曲（デフォルト起動曲：ゴリウォーグのケークウォーク）
+## 収録曲（デフォルト起動曲：幻想即興曲）
 
-| No. | 曲名 | 作曲家 | 収録MIDI出典 |
-| :--- | :--- | :--- | :--- |
-| 01 | 幻想即興曲 | Frédéric Chopin (1834) | [Mutopia Project](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1693)（Public Domain） |
-| 02 | 貴婦人の乗馬 | Friedrich Burgmüller (1851) | [BitMidi](https://bitmidi.com/study-no-25-la-chevaleresque-opus-100-mid) |
-| 03 | **ゴリウォーグのケークウォーク**（デフォルト） | Claude Debussy (1908) | [BitMidi](https://bitmidi.com/golliwogs-cake-walk-mid) |
-| 04 | アラベスク（第1番） | Claude Debussy (1888) | [Mutopia Project](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1777)（Public Domain） |
-| 05 | フニクリ・フニクラ | Luigi Denza (1880) | [BitMidi](https://bitmidi.com/funicula-mid)（ピアノソロ2トラックに整形） |
+選曲すると、その曲に合わせたビジュアルスタイルが自動で適用されます。
+
+| No. | 曲名 | 作曲家 | 自動スタイル | 収録MIDI出典 |
+| :--- | :--- | :--- | :--- | :--- |
+| 01 | **幻想即興曲**（デフォルト） | Frédéric Chopin (1834) | Moonlight | [Mutopia Project](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1693)（Public Domain） |
+| 02 | 貴婦人の乗馬 | Friedrich Burgmüller (1851) | Studio | [BitMidi](https://bitmidi.com/study-no-25-la-chevaleresque-opus-100-mid) |
+| 03 | ゴリウォーグのケークウォーク | Claude Debussy (1908) | Golden hour | [BitMidi](https://bitmidi.com/golliwogs-cake-walk-mid) |
+| 04 | アラベスク（Op.100-2） | Friedrich Burgmüller (1851) | Faded film | [Mutopia Project](https://www.mutopiaproject.org/ftp/BurgmullerJFF/O100/25EF-02/25EF-02.mid)（Public Domain） |
+| 05 | フニクリ・フニクラ | Luigi Denza (1880) | Golden hour | [BitMidi](https://bitmidi.com/funicula-mid)（ピアノソロ2トラックに整形） |
 
 ※ ブラウザ上の「ライブラリ」または画面へのドラッグ＆ドロップで、お手元の `.mid` ファイルも追加演奏できます。
+
+## カスタム要素
+
+- **ピアノ刻印**: 響板の金箔ロゴに `YAMAHA`、鋳鉄フレームに `made by tsuda in 2026` を刻印
+- **右手中指の指輪**: 交差する3連プラチナクロスバンド＋4本爪イエローストーン＋一列メレダイヤを、右手中指に装着
+- **空間ネオン音符＆音の繋がり（オプション）**: 打鍵から半透明ネオンの立体音符が浮かび上がり、連続するメロディ同士を光のカーブラインで結ぶ演出（設定 → 照明タブ、または `N` キーでON/OFF）
+- **和紙調＆演奏連動で舞う楽譜**: 譜面台に曲名・作曲家を和紙調で印字し、ピアノ周囲〜窓の光の中を6枚の楽譜が演奏に合わせてゆっくり舞う（空間ネオン音符ON時は縁も淡く発光、設定でON/OFF可）
+- **引きカメラ3種**: `Wide: Treble side (A)` / `Wide: Window backlight (B)` / `Wide: Stage overview (C)` を自動編集とショット切替に追加
 
 ## 構成
 

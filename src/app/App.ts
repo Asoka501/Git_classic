@@ -316,6 +316,8 @@ export class App {
       const wasPlaying = this.playing;
       if (wasPlaying) this.pause();
       this.piece = { bytes, parsed, perf, timeline, camera, overrides, tracks: sel, source, title: meta.title, artist: meta.artist };
+      this.view.setPieceMeta(meta.title, meta.artist);
+      if (!sameSource && entry?.style) this.setStyle(entry.style);
       this.t = sameSource ? Math.min(this.t, score.duration) : 0;
       this.loading = null;
       this.renderNow();
@@ -581,7 +583,9 @@ export class App {
     }
     const frame = this.piece.timeline.evaluate(t);
     this.frame = frame;
+    const energy = Math.min(1, frame.sounding.reduce((acc, n) => acc + n.velocity * 0.22, 0));
     this.view.update(frame);
+    this.view.updateEffects(t, this.piece.perf.notes, energy);
     this.view.camera.position.copy(cam.position);
     this.view.camera.lookAt(cam.target);
     this.view.camera.updateMatrixWorld();
@@ -635,7 +639,9 @@ export class App {
     }
     const frame = L.performer.evaluate(t);
     this.frame = frame;
+    const energy = Math.min(1, frame.sounding.reduce((acc, n) => acc + n.velocity * 0.22, 0));
     this.view.update(frame);
+    this.view.updateEffects(t, null, energy);
     this.view.camera.position.copy(cam.position);
     this.view.camera.lookAt(cam.target);
     this.view.camera.updateMatrixWorld();

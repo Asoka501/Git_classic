@@ -209,6 +209,48 @@ const SHOTS: Shot[] = [
     },
   },
   {
+    id: 'wide-treble',
+    name: 'Wide: Treble side (A)',
+    scale: 'wide',
+    fit: (f) => (f.first ? -1 : 0.45 + 0.35 * f.intensity),
+    frame(ctx, t, s) {
+      // 案A：高音側からの斜め引き（ピアノ全体・窓の光・空間ネオン音符）
+      const u = ease((t - s.a) / (s.b - s.a));
+      const c = subject(ctx, 'both', t, s, 0.3);
+      const target = V(c.x - 0.08, 0.16, -0.14);
+      const pos = V(lerp(1.48, 1.36, u), lerp(0.76, 0.66, u), lerp(0.96, 0.88, u));
+      return state(pos, target, 28, 5.6, c);
+    },
+  },
+  {
+    id: 'wide-window',
+    name: 'Wide: Window backlight (B)',
+    scale: 'wide',
+    fit: (f) => (f.first ? -1 : 0.4 + 0.3 * (1 - f.density * 0.1)),
+    frame(ctx, t, s) {
+      // 案B：低音・窓側からの逆光ワイド（光芒＋舞う楽譜＋ピアノ全体）
+      const u = ease((t - s.a) / (s.b - s.a));
+      const c = subject(ctx, 'both', t, s, 0.3);
+      const target = V(c.x + 0.08, 0.14, -0.14);
+      const pos = V(lerp(-1.38, -1.28, u), lerp(0.96, 0.86, u), lerp(0.86, 0.78, u));
+      return state(pos, target, 28, 5.6, c);
+    },
+  },
+  {
+    id: 'wide-stage',
+    name: 'Wide: Stage overview (C)',
+    scale: 'wide',
+    fit: (f) => (f.first ? -1 : 0.35 + 0.45 * f.intensity),
+    frame(ctx, t, s) {
+      // 案C：正面高所からの俯瞰ワイド（全体像＋空間ネオン音符＋前腕隠し）
+      const u = ease((t - s.a) / (s.b - s.a));
+      const c = subject(ctx, 'both', t, s, 0.3);
+      const target = V(c.x, 0.18, -0.18);
+      const pos = V(lerp(0.14, -0.06, u), lerp(1.32, 1.18, u), lerp(0.72, 0.64, u));
+      return state(pos, target, 24, 6.3, c);
+    },
+  },
+  {
     id: 'establishing',
     name: 'Establishing',
     scale: 'wide',

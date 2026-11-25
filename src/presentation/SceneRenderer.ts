@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { TIP_RADIUS } from '../core/handGeometry';
-import type { Hand } from '../core/types';
+import type { Hand, PerformanceNote } from '../core/types';
 import type { FrameState } from '../performance/PerformanceTimeline';
 import type { CameraState } from './CinematicCamera';
 import { Environment, DEFAULT_LIGHTS, WINDOW, WINDOW_BARS, type LightSettings } from './Environment';
@@ -16,7 +16,8 @@ import { PianoModel } from './PianoModel';
 import { InteriorLighting } from './InteriorLight';
 import { PianoInterior } from './PianoInterior';
 import { PostPipeline, type PostParams, type Quality } from './PostPipeline';
-import { createSheetMusic } from './SheetMusic';
+import { createSheetMusic, type SheetMusicVisual } from './SheetMusic';
+import { NeonNotes } from './NeonNotes';
 import { SHARED_UNIFORMS } from './shaderPatch';
 
 export interface Look {
@@ -52,6 +53,11 @@ export interface Look {
   /** ambient occlusion: darkening where surfaces crowd each other */
   aoOn: boolean;
   ao: number;
+  /** 空間ネオン音符＆音の繋がり表示 */
+  neonNotesOn: boolean;
+  neonNotes: number;
+  /** 演奏連動で舞う和紙調楽譜 */
+  floatingSheetsOn: boolean;
 }
 
 export const DEFAULT_LOOK: Look = {
@@ -79,6 +85,9 @@ export const DEFAULT_LOOK: Look = {
   openPiano: true,
   aoOn: true,
   ao: 0.6,
+  neonNotesOn: true,
+  neonNotes: 1.0,
+  floatingSheetsOn: true,
 };
 
 /** exposure time of the shutter (s) */
@@ -149,7 +158,8 @@ export class SceneRenderer {
   private bounceAgain = false;
   private bounceTimer = 0;
   readonly debugLayer = new THREE.Group();
-  private sheet: THREE.Object3D;
+  private sheet: SheetMusicVisual;
+  private neonNotes = new NeonNotes();
   /** inside the piano, and what comes off to show it (the upper panel with its music desk, the sconces on it, the score) */
   interior: PianoInterior | null = null;
   private panelParts: THREE.Object3D[] = [];
@@ -175,7 +185,8 @@ export class SceneRenderer {
     this.env = new Environment();
     this.scene.add(this.env.root);
     this.sheet = createSheetMusic();
-    this.scene.add(this.sheet);
+    this.scene.add(this.sheet.root);
+    this.scene.add(this.neonNotes.root);
     this.scene.background = new THREE.Color(0x020202);
     this.scene.fog = new THREE.FogExp2(0x060403, 0.12);
     this.post = new PostPipeline(this.renderer);
@@ -231,7 +242,7 @@ export class SceneRenderer {
     this.piano.root.add(this.interior.root);
     const upper = this.piano.root.getObjectByName('UpperPanel');
     this.interiorLight = new InteriorLighting(this.interior.root, this.interior.rows(), upper ?? null, new THREE.Vector3(WINDOW.x, WINDOW.y, WINDOW.z));
-    this.panelParts = [upper, this.piano.sconces, this.sheet].filter((o): o is THREE.Object3D => !!o);
+    this.panelParts = [upper, this.piano.sconces, this.sheet.deskGroup].filter((o): o is THREE.Object3D => !!o);
     this.applyOpen(this.look.openPiano);
     MIRROR_UNIFORMS.uMirror.value = this.mirrorRT.texture;
     this.captureHandReflections();
@@ -587,6 +598,17 @@ export class SceneRenderer {
   }
 
   /** t (performance time) seeds the film grain, so a paused frame is a still image */
+  /** 譜面台の楽譜タイトルを更新 */
+  setPieceMeta(title: string, artist: string) {
+    this.sheet.setTitle(title, artist);
+  }
+
+  /** 空間ネオン音符・舞う楽譜の時刻 t における状態を更新 */
+  updateEffects(t: number, notes: readonly PerformanceNote[] | null, energy: number) {
+    this.neonNotes.update(t, notes, this.look.neonNotesOn, this.look.neonNotes);
+    this.sheet.update(t, energy, this.look.floatingSheetsOn, this.look.neonNotesOn, this.look.neonNotes);
+  }
+
   render(cam: CameraState, t: number) {
     this.camera.position.copy(cam.position);
     this.camera.up.set(Math.sin(cam.roll), Math.cos(cam.roll), 0);

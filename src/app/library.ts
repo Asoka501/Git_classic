@@ -2,7 +2,7 @@
 import fantaisieImpromptu from '../music/chopin-fantaisie-impromptu.mid?inline';
 import laChevaleresque from '../music/burgmuller-la-chevaleresque.mid?inline';
 import golliwoggsCakewalk from '../music/debussy-golliwoggs-cakewalk.mid?inline';
-import arabesque1 from '../music/debussy-arabesque-1.mid?inline';
+import arabesque from '../music/burgmuller-arabesque.mid?inline';
 import funiculiFunicula from '../music/denza-funiculi-funicula.mid?inline';
 import extra from 'virtual:extra-music';
 
@@ -14,6 +14,8 @@ export interface LibraryEntry {
   artist: string;
   year?: string;
   group: LibraryGroup;
+  /** 選曲時に自動適用するビジュアルスタイルID */
+  style?: string;
   blurb: string;
   bytes(): Uint8Array;
 }
@@ -38,6 +40,7 @@ const BUILT_IN: LibraryEntry[] = [
     artist: 'Frédéric Chopin',
     year: '1834',
     group: 'Classical',
+    style: 'moonlight',
     blurb: '嬰ハ短調 作品66。疾走する16分音符と左手の3連符が織りなす情熱的な主部と、甘美な中間部の対比が際立つ名曲。',
     bytes: fromDataUrl(fantaisieImpromptu),
   },
@@ -47,6 +50,7 @@ const BUILT_IN: LibraryEntry[] = [
     artist: 'Friedrich Burgmüller',
     year: '1851',
     group: 'Classical',
+    style: 'studio',
     blurb: '『25の練習曲』作品100 第25番。軽快なスタッカートと華やかなアルペジオで駆け抜けるフィナーレ。',
     bytes: fromDataUrl(laChevaleresque),
   },
@@ -56,17 +60,19 @@ const BUILT_IN: LibraryEntry[] = [
     artist: 'Claude Debussy',
     year: '1908',
     group: 'Classical',
+    style: 'golden',
     blurb: '組曲『子供の領分』第6曲。ラグタイム風のシンコペーションと軽妙なユーモアが弾ける代表作。',
     bytes: fromDataUrl(golliwoggsCakewalk),
   },
   {
-    id: 'arabesque-1',
+    id: 'arabesque',
     title: 'アラベスク',
-    artist: 'Claude Debussy',
-    year: '1888',
+    artist: 'Friedrich Burgmüller',
+    year: '1851',
     group: 'Classical',
-    blurb: '『2つのアラベスク』第1番 ホ長調。流れるような分散和音と3連符が繊細な装飾模様を描く初期の傑作。',
-    bytes: fromDataUrl(arabesque1),
+    style: 'faded',
+    blurb: '『25の練習曲』作品100 第2番。軽やかな16分音符の装飾音型と弾む和音が印象的な定番曲。',
+    bytes: fromDataUrl(arabesque),
   },
   {
     id: 'funiculi-funicula',
@@ -74,6 +80,7 @@ const BUILT_IN: LibraryEntry[] = [
     artist: 'Luigi Denza',
     year: '1880',
     group: 'Classical',
+    style: 'golden',
     blurb: 'ヴェスヴィオ火山の登山鉄道開通を記念して作られた陽気なナポリ民謡のピアノソロ編。',
     bytes: fromDataUrl(funiculiFunicula),
   },
@@ -86,7 +93,7 @@ export const LIBRARY: LibraryEntry[] = [...EXTRA, ...BUILT_IN.filter((e) => !EXT
   .sort((a, b) => GROUPS.indexOf(a.e.group) - GROUPS.indexOf(b.e.group) || a.i - b.i)
   .map(({ e }) => e);
 
-/** デフォルト起動曲 */
-export const DEFAULT_PIECE: string = extra.defaultPiece ?? 'golliwoggs-cakewalk';
+/** デフォルト起動曲：幻想即興曲 */
+export const DEFAULT_PIECE: string = extra.defaultPiece ?? 'fantaisie-impromptu';
 
 export const entryById = (id: string) => LIBRARY.find((e) => e.id === id);

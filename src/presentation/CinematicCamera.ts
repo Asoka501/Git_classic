@@ -47,6 +47,9 @@ const CONTINUOUS: Record<Exclude<CameraMode, 'cinematic'>, string> = { follow: '
 
 /** the order the arrows step through: wide to close, then inside the piano (only while it is open) */
 export const CYCLE_ORDER = [
+  'shot:wide-treble',
+  'shot:wide-window',
+  'shot:wide-stage',
   'shot:establishing',
   'overhead',
   'shot:overhead-crane',

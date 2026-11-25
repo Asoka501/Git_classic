@@ -67,7 +67,7 @@ import { patch } from './shaderPatch';
 const STAMP_UP = 1;
 
 /** the piano's (invented) maker, cast into the plate and on the soundboard's decal (as on the nameboard) */
-const MAKER = 'Halloran & Vey';
+const MAKER = 'YAMAHA';
 
 const N_DAMPED = UNDAMPED_FROM - LOWEST_MIDI;
 /** the hammer rest rail is this far above the hammer pivots, which stand at about this depth */
