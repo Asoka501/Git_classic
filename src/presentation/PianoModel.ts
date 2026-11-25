@@ -201,14 +201,14 @@ function splitSconces(caseScene: THREE.Object3D): THREE.Object3D | null {
  * Nameboard に焼き込まれた旧ロゴ（Halloran & Vey / LONDON）の三角形のみ除去し、
  * 金箔ロゴ「YAMAHA」および「MADE BY TSUDA IN 2026」に差し替えます。
  */
-function replaceNameboardLogo(caseScene: THREE.Object3D) {
+function replaceNameboardLogo(caseScene: THREE.Object3D, palette: Palette) {
   const nb = caseScene.getObjectByName('Nameboard');
   if (nb) {
     nb.traverse((o) => {
       const mesh = o as THREE.Mesh;
       if (!mesh.isMesh) return;
       const matName = (mesh.material as THREE.Material | undefined)?.name ?? '';
-      if (!matName.toLowerCase().includes('gold')) return;
+      if (mesh.material !== palette.gold && !matName.toLowerCase().includes('gold')) return;
       const g = mesh.geometry;
       const pos = g.getAttribute('position');
       if (!pos) return;
@@ -285,7 +285,7 @@ export class PianoModel {
   constructor(caseScene: THREE.Object3D | null, palette: Palette) {
     this.root.name = 'Piano';
     if (caseScene) {
-      replaceNameboardLogo(caseScene);
+      replaceNameboardLogo(caseScene, palette);
       this.root.add(caseScene);
     }
     this.sconces = caseScene ? splitSconces(caseScene) : null;
