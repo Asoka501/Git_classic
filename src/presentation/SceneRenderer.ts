@@ -604,8 +604,8 @@ export class SceneRenderer {
   }
 
   /** 空間ネオン音符・舞う楽譜の時刻 t における状態を更新 */
-  updateEffects(t: number, notes: readonly PerformanceNote[] | null, energy: number) {
-    this.neonNotes.update(t, notes, this.look.neonNotesOn, this.look.neonNotes);
+  updateEffects(t: number, notes: readonly PerformanceNote[] | null, tempos: readonly { time: number; bpm: number }[] | null, energy: number) {
+    this.neonNotes.update(t, notes, tempos, this.look.neonNotesOn, this.look.neonNotes);
     this.sheet.update(t, energy, this.look.floatingSheetsOn, this.look.neonNotesOn, this.look.neonNotes);
   }
 

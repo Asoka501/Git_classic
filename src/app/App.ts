@@ -263,9 +263,9 @@ export class App {
 
   // ------------------------------------------------------------- pieces
   /** open a piece from the library */
-  openEntry(e: LibraryEntry, progress?: (f: number, label: string) => void) {
+  openEntry(e: LibraryEntry, progress?: (f: number, label: string) => void, autoPlay = false) {
     const { bytes } = this.entryInfo(e).req;
-    return this.build(bytes, readMidi(bytes, `${e.id}.mid`), { kind: 'library', id: e.id }, new Map(), undefined, { title: e.title, artist: e.artist }, progress);
+    return this.build(bytes, readMidi(bytes, `${e.id}.mid`), { kind: 'library', id: e.id }, new Map(), undefined, { title: e.title, artist: e.artist }, progress, autoPlay);
   }
 
   /** a user file: returns the parsed MIDI so the UI can offer track selection */
@@ -276,7 +276,7 @@ export class App {
 
   async openFile(bytes: Uint8Array, parsed: ParsedMidi, name: string, tracks?: number[]) {
     const id = await this.rememberFile(bytes, name, parsed, tracks);
-    return this.build(bytes, parsed, { kind: 'file', id, name }, new Map(), tracks, { title: titleOf(parsed, name), artist: name });
+    return this.build(bytes, parsed, { kind: 'file', id, name }, new Map(), tracks, { title: titleOf(parsed, name), artist: name }, undefined, true);
   }
 
   /**
@@ -293,6 +293,7 @@ export class App {
     tracks: number[] | undefined,
     meta: { title: string; artist: string },
     progress?: (f: number, label: string) => void,
+    autoPlay = false,
   ) {
     const seq = ++this.buildSeq;
     const sel = tracks ?? defaultTrackSelection(parsed.tracks);
@@ -322,7 +323,7 @@ export class App {
       this.loading = null;
       this.renderNow();
       this.emit('piece');
-      if (wasPlaying) void this.play();
+      if (wasPlaying || autoPlay) void this.play();
     } catch (err) {
       if (seq !== this.buildSeq || err instanceof Cancelled) return; // superseded: nothing to report
       this.loading = null;
@@ -585,7 +586,7 @@ export class App {
     this.frame = frame;
     const energy = Math.min(1, frame.sounding.reduce((acc, n) => acc + n.velocity * 0.22, 0));
     this.view.update(frame);
-    this.view.updateEffects(t, this.piece.perf.notes, energy);
+    this.view.updateEffects(t, this.piece.perf.notes, this.piece.perf.score.tempos, energy);
     this.view.camera.position.copy(cam.position);
     this.view.camera.lookAt(cam.target);
     this.view.camera.updateMatrixWorld();
@@ -641,7 +642,7 @@ export class App {
     this.frame = frame;
     const energy = Math.min(1, frame.sounding.reduce((acc, n) => acc + n.velocity * 0.22, 0));
     this.view.update(frame);
-    this.view.updateEffects(t, null, energy);
+    this.view.updateEffects(t, null, null, energy);
     this.view.camera.position.copy(cam.position);
     this.view.camera.lookAt(cam.target);
     this.view.camera.updateMatrixWorld();

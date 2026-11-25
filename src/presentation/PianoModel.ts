@@ -197,6 +197,82 @@ function splitSconces(caseScene: THREE.Object3D): THREE.Object3D | null {
   return group;
 }
 
+/**
+ * Nameboard に焼き込まれた旧ロゴ（Halloran & Vey / LONDON）の三角形のみ除去し、
+ * 金箔ロゴ「YAMAHA」および「MADE BY TSUDA IN 2026」に差し替えます。
+ */
+function replaceNameboardLogo(caseScene: THREE.Object3D) {
+  const nb = caseScene.getObjectByName('Nameboard');
+  if (nb) {
+    nb.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      const matName = (mesh.material as THREE.Material | undefined)?.name ?? '';
+      if (!matName.toLowerCase().includes('gold')) return;
+      const g = mesh.geometry;
+      const pos = g.getAttribute('position');
+      if (!pos) return;
+      const idx = g.getIndex();
+      if (idx) {
+        const keep: number[] = [];
+        for (let i = 0; i < idx.count; i += 3) {
+          const a = idx.getX(i), b = idx.getX(i + 1), c = idx.getX(i + 2);
+          const yc = (pos.getY(a) + pos.getY(b) + pos.getY(c)) / 3;
+          // 下部の金細線（y ≈ 0.0115）だけ残し、上部の旧文字（y > 0.0135）を除外
+          if (yc <= 0.0135) keep.push(a, b, c);
+        }
+        g.setIndex(keep);
+      } else {
+        // 非インデックスジオメトリの場合は位置をゼロ縮退
+        const arr = pos.array as Float32Array;
+        for (let i = 0; i < pos.count; i += 3) {
+          const yc = (pos.getY(i) + pos.getY(i + 1) + pos.getY(i + 2)) / 3;
+          if (yc > 0.0135) {
+            for (let k = 0; k < 9; k++) arr[i * 3 + k] = 0;
+          }
+        }
+        pos.needsUpdate = true;
+      }
+    });
+  }
+  if (typeof document === 'undefined') return;
+  const W = 2048, H = 360;
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const g = c.getContext('2d')!;
+  g.clearRect(0, 0, W, H);
+  // 高級感のある金箔グラデーション
+  const grad = g.createLinearGradient(0, H * 0.1, 0, H * 0.9);
+  grad.addColorStop(0, '#f8e2a6');
+  grad.addColorStop(0.5, '#d9b15f');
+  grad.addColorStop(1, '#b88c3a');
+  g.fillStyle = grad;
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.font = '600 132px "Cormorant Garamond", Georgia, "Times New Roman", serif';
+  (g as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = '28px';
+  g.fillText('YAMAHA', W / 2, H * 0.42);
+  g.font = '500 36px Georgia, "Times New Roman", serif';
+  (g as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = '10px';
+  g.fillText('MADE BY TSUDA IN 2026', W / 2, H * 0.78);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8;
+  const plaqueMat = new THREE.MeshStandardMaterial({
+    map: tex,
+    transparent: true,
+    alphaTest: 0.02,
+    metalness: 0.88,
+    roughness: 0.24,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+  });
+  const plaque = new THREE.Mesh(new THREE.PlaneGeometry(0.24, 0.042), plaqueMat);
+  plaque.name = 'CustomNameboardLogo';
+  plaque.position.set(0, 0.032, -0.1518);
+  caseScene.add(plaque);
+}
+
 export class PianoModel {
   readonly root = new THREE.Group();
   /** the brass sconces on the upper panel (null without a case) */
@@ -208,7 +284,10 @@ export class PianoModel {
 
   constructor(caseScene: THREE.Object3D | null, palette: Palette) {
     this.root.name = 'Piano';
-    if (caseScene) this.root.add(caseScene);
+    if (caseScene) {
+      replaceNameboardLogo(caseScene);
+      this.root.add(caseScene);
+    }
     this.sconces = caseScene ? splitSconces(caseScene) : null;
     const blackGeo = blackKeyGeometry();
     for (const k of KEYS) {

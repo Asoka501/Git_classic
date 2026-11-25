@@ -141,7 +141,7 @@ export class LibrarySheet {
     row.onclick = () => {
       this.close();
       if (this.isCurrent(`library:${e.id}`)) return;
-      this.app.openEntry(e).catch((err) => this.actions.toast(`「${e.title}」を演奏できませんでした: ${err instanceof Error ? err.message : err}`, 6000));
+      this.app.openEntry(e, undefined, true).catch((err) => this.actions.toast(`「${e.title}」を演奏できませんでした: ${err instanceof Error ? err.message : err}`, 6000));
     };
     return row;
   }
