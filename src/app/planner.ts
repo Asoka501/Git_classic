@@ -176,7 +176,7 @@ export class Planner {
     }
     if (req.prebuilt) {
       try {
-        progress?.(0.4, 'Fetching the prepared performance');
+        progress?.(0.4, '事前計算データを読み込み中…');
         const data = await fetchPrebuilt(req.prebuilt);
         this.status.set(key, 1);
         progress?.(1, 'Ready');

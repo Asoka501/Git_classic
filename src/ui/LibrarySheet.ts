@@ -32,7 +32,7 @@ export class LibrarySheet {
     this.back.setAttribute('aria-modal', 'true');
     this.back.setAttribute('aria-label', 'ライブラリ');
     const head = el('header', 'lib-head');
-    head.innerHTML = `<div><div class="eyebrow">The Mechanical Pianist</div><h2>Programme</h2></div>`;
+    head.innerHTML = `<div><div class="eyebrow">Sonata Mechanica</div><h2>Programme</h2></div>`;
     const open = el('button', 'lib-open', `${svg(PLUS_ICON, 16)}<span>MIDIファイルを開く</span>`);
     open.title = 'お手元のMIDIファイルを演奏します（画面にドラッグ＆ドロップでも読み込み可能）';
     open.onclick = () => this.actions.pickFile();

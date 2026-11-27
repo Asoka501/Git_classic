@@ -5,9 +5,9 @@ import golliwoggsCakewalk from '../music/debussy-golliwoggs-cakewalk.mid?inline'
 import arabesque from '../music/burgmuller-arabesque.mid?inline';
 import newWorld from '../music/dvorak-new-world.mid?inline';
 import vivaldiWinter from '../music/vivaldi-winter.mid?inline';
-import funiculiFunicula from '../music/denza-funiculi-funicula.mid?inline';
 import moonlight3 from '../music/beethoven-moonlight-3.mid?inline';
 import laCampanella from '../music/liszt-la-campanella.mid?inline';
+import funiculiFunicula from '../music/denza-funiculi-funicula.mid?inline';
 import extra from 'virtual:extra-music';
 
 export type LibraryGroup = 'Original' | 'Classical' | 'Songs';
@@ -36,7 +36,7 @@ function fromDataUrl(url: string): () => Uint8Array {
   };
 }
 
-/** 収録曲一覧（プログラム順・全9曲） */
+/** 収録曲一覧（プログラム順・全9曲／フニクリ・フニクラを最後に配置） */
 const BUILT_IN: LibraryEntry[] = [
   {
     id: 'fantaisie-impromptu',
@@ -79,34 +79,24 @@ const BUILT_IN: LibraryEntry[] = [
     bytes: fromDataUrl(arabesque),
   },
   {
-    id: 'new-world',
-    title: '交響曲第9番「新世界より」',
+    id: 'new-world-4',
+    title: '交響曲第9番「新世界より」第4楽章',
     artist: 'Antonín Dvořák',
     year: '1893',
     group: 'Classical',
     style: 'golden',
-    blurb: '第2楽章ラルゴ（「家路」）。夕暮れの郷愁と静かな祈りを湛えた名旋律のピアノソロ編。',
+    blurb: 'Allegro con fuoco。力強い弦の刻みから金管の壮大な主題が轟く、劇的フィナーレのピアノ編。',
     bytes: fromDataUrl(newWorld),
   },
   {
     id: 'vivaldi-winter',
-    title: '四季より「冬」',
+    title: '四季より「冬」第1楽章',
     artist: 'Antonio Vivaldi',
     year: '1725',
     group: 'Classical',
     style: 'noir-cyan',
-    blurb: 'ヴァイオリン協奏曲『四季』作品8 第4番 第1楽章。凍てつく風と鋭い刻みが疾走するバロックの名作ピアノ編。',
+    blurb: 'ヴァイオリン協奏曲『四季』作品8 第4番 第1楽章 Allegro non molto。凍てつく風と鋭い刻みが疾走するバロックの名作ピアノ編。',
     bytes: fromDataUrl(vivaldiWinter),
-  },
-  {
-    id: 'funiculi-funicula',
-    title: 'フニクリ・フニクラ',
-    artist: 'Luigi Denza',
-    year: '1880',
-    group: 'Classical',
-    style: 'golden',
-    blurb: 'ヴェスヴィオ火山の登山鉄道開通を記念して作られた陽気なナポリ民謡のピアノソロ編。',
-    bytes: fromDataUrl(funiculiFunicula),
   },
   {
     id: 'moonlight-3',
@@ -127,6 +117,16 @@ const BUILT_IN: LibraryEntry[] = [
     style: 'noir-cyan',
     blurb: '『パガニーニによる大練習曲』第3番 嬰ト短調。高音域に澄んだ鐘の音が響き渡る超絶技巧の名曲。',
     bytes: fromDataUrl(laCampanella),
+  },
+  {
+    id: 'funiculi-funicula',
+    title: 'フニクリ・フニクラ',
+    artist: 'Luigi Denza',
+    year: '1880',
+    group: 'Classical',
+    style: 'golden',
+    blurb: 'ヴェスヴィオ火山の登山鉄道開通を記念して作られた陽気なナポリ民謡のピアノソロ編。',
+    bytes: fromDataUrl(funiculiFunicula),
   },
 ];
 
