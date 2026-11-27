@@ -87,34 +87,36 @@ export class AudioEngine {
   reverb = 0.3;
   room: RoomId = 'parlour';
   onStatus?: (s: AudioStatus) => void;
+  private initPromise: Promise<void> | null = null;
 
   constructor(private base: string) {}
 
-  /** create the context (must be inside a user gesture) and start loading */
+  /** create the context and start loading samples immediately without blocking on autoplay resume */
   async init() {
     playThroughSilentSwitch();
     if (this.ctx) {
-      // suspended, or 'interrupted' on iOS (a call, the app sent to the background)
-      if (this.ctx.state !== 'running') await this.ctx.resume();
+      if (this.ctx.state !== 'running') void this.ctx.resume().catch(() => {});
+      if (this.initPromise) await this.initPromise;
       return;
     }
     const ctx = new AudioContext({ latencyHint: 'interactive' });
     this.ctx = ctx;
-    // mobile browsers can create it suspended even inside the tap: resume before anything awaits
-    const resumed = ctx.state === 'running' ? Promise.resolve() : ctx.resume().catch(() => {});
+    if (ctx.state !== 'running') void ctx.resume().catch(() => {});
     this.buildGraph(ctx, this.muted ? 0 : this.volume);
     this.setStatus('loading');
-    await resumed;
-    try {
-      await this.loadSamples(ctx);
-      this.setStatus('samples');
-    } catch (e) {
-      console.warn('piano samples unavailable, using the synthesized piano', e);
-      const synth = synthesizePiano(ctx, sampleMidis());
-      this.layers = [{ vel: 0.55, zones: [...synth].map(([root, buf]) => ({ root, cents: 0, keys: [root, root] as [number, number], buf })) }];
-      this.gain = 1;
-      this.setStatus('synth');
-    }
+    this.initPromise = (async () => {
+      try {
+        await this.loadSamples(ctx);
+        this.setStatus('samples');
+      } catch (e) {
+        console.warn('piano samples unavailable, using the synthesized piano', e);
+        const synth = synthesizePiano(ctx, sampleMidis());
+        this.layers = [{ vel: 0.55, zones: [...synth].map(([root, buf]) => ({ root, cents: 0, keys: [root, root] as [number, number], buf })) }];
+        this.gain = 1;
+        this.setStatus('synth');
+      }
+    })();
+    await this.initPromise;
   }
 
   /** the output chain on a context: voices -> dry and room sends -> master -> compressor -> out */
@@ -302,7 +304,7 @@ export class AudioEngine {
   }
 
   get isRunning() {
-    return this.running && !!this.ctx;
+    return this.running && !!this.ctx && this.ctx.state === 'running';
   }
 
   get ready() {

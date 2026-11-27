@@ -451,25 +451,35 @@ export class App {
     this.playing = true;
     this.lastWall = performance.now();
     this.emit('transport');
+    const armUnlock = () => {
+      if (!this.audio.ctx || this.audio.ctx.state === 'running') return;
+      this.emit('audio-locked');
+      const unlock = () => {
+        window.removeEventListener('pointerdown', unlock, true);
+        window.removeEventListener('keydown', unlock, true);
+        window.removeEventListener('touchstart', unlock, true);
+        const c = this.audio.ctx;
+        if (!c) return;
+        void c.resume().then(() => {
+          this.emit('audio-unlocked');
+          if (this.playing && this.piece && this.audio.ready) this.audio.start(this.piece.timeline, this.t, this.speed);
+        });
+      };
+      window.addEventListener('pointerdown', unlock, { capture: true, once: true });
+      window.addEventListener('keydown', unlock, { capture: true, once: true });
+      window.addEventListener('touchstart', unlock, { capture: true, once: true });
+    };
     try {
       await this.audio.init();
     } catch (e) {
       console.warn('audio unavailable', e);
     }
-    if (this.playing && this.audio.ready) this.audio.start(this.piece.timeline, this.t, this.speed);
-    // ブラウザの自動再生制限でAudioContextが停止中の場合、最初のクリック／キー入力で即座に音を有効化
-    if (this.audio.ctx && this.audio.ctx.state === 'suspended') {
-      const unlock = () => {
-        window.removeEventListener('pointerdown', unlock);
-        window.removeEventListener('keydown', unlock);
-        if (this.audio.ctx && this.audio.ctx.state === 'suspended') {
-          void this.audio.ctx.resume().then(() => {
-            if (this.playing && this.piece && this.audio.ready) this.audio.start(this.piece.timeline, this.t, this.speed);
-          });
-        }
-      };
-      window.addEventListener('pointerdown', unlock, { once: true });
-      window.addEventListener('keydown', unlock, { once: true });
+    if (this.playing && this.audio.ready) {
+      if (this.audio.ctx?.state === 'running') {
+        this.audio.start(this.piece.timeline, this.t, this.speed);
+      } else {
+        armUnlock();
+      }
     }
   }
 

@@ -235,6 +235,8 @@ export class AppUI {
     this.library.refresh(what);
     if (what === 'quality')
       this.toast(`滑らかな再生を保つため画質を「${QUALITY_LABEL[this.app.view.post.quality] ?? this.app.view.post.quality}」に下げました（設定 → カメラで変更可）`, 6000);
+    if (what === 'audio-locked') this.toast('画面をクリックまたはキーを押すと音声がオンになります', 8000);
+    if (what === 'audio-unlocked') this.toast('');
     if (what === 'audio') {
       const s = this.app.audio.status;
       if (s === 'loading') this.toast('ピアノを調律中…');
