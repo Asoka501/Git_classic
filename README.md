@@ -1,6 +1,6 @@
 # Git_classic — The Mechanical Pianist
 
-MIDIを2本のロボットハンドがリアルタイムに演奏する、3DピアノのWebアプリです。Three.jsで描画し、運指プランを事前に計算して、鍵盤・ペダル・手の動きまで含めた演奏をブラウザ上で再現します。通常UIは日本語化し（タイトル・Programme・Cinematic・ビジュアルスタイル名などの演出表記は英語を維持）、クラシックを中心に5曲を収録しています。
+MIDIを2本のロボットハンドがリアルタイムに演奏する、3DピアノのWebアプリです。Three.jsで描画し、運指プランを事前に計算して、鍵盤・ペダル・手の動きまで含めた演奏をブラウザ上で再現します。通常UIは日本語化し（タイトル・Programme・Cinematic・ビジュアルスタイル名などの演出表記は英語を維持）、クラシックを中心に9曲を収録しています。
 
 公開ページ: https://asoka501.github.io/Git_classic/
 
@@ -16,7 +16,11 @@ MIDIを2本のロボットハンドがリアルタイムに演奏する、3Dピ�
 | 02 | 貴婦人の乗馬 | Friedrich Burgmüller (1851) | Studio | [BitMidi](https://bitmidi.com/study-no-25-la-chevaleresque-opus-100-mid) |
 | 03 | ゴリウォーグのケークウォーク | Claude Debussy (1908) | Golden hour | [BitMidi](https://bitmidi.com/golliwogs-cake-walk-mid) |
 | 04 | アラベスク（Op.100-2） | Friedrich Burgmüller (1851) | Faded film | [Mutopia Project](https://www.mutopiaproject.org/ftp/BurgmullerJFF/O100/25EF-02/25EF-02.mid)（Public Domain） |
-| 05 | フニクリ・フニクラ | Luigi Denza (1880) | Golden hour | [BitMidi](https://bitmidi.com/funicula-mid)（ピアノソロ2トラックに整形） |
+| 05 | 交響曲第9番「新世界より」 | Antonín Dvořák (1893) | Golden hour | — |
+| 06 | 四季より「冬」 | Antonio Vivaldi (1725) | Noir cyan | — |
+| 07 | フニクリ・フニクラ | Luigi Denza (1880) | Golden hour | [BitMidi](https://bitmidi.com/funicula-mid)（ピアノソロ2トラックに整形） |
+| 08 | 月光ソナタ 第3楽章 | Ludwig van Beethoven (1801) | Moonlight | — |
+| 09 | ラ・カンパネラ | Franz Liszt (1851) | Noir cyan | — |
 
 ※ ブラウザ上の「ライブラリ」または画面へのドラッグ＆ドロップで、お手元の `.mid` ファイルも追加演奏できます。
 
@@ -44,7 +48,7 @@ MIDIを2本のロボットハンドがリアルタイムに演奏する、3Dピ�
 このリポジトリは `.github/workflows/pages.yml` により、`main` ブランチへプッシュするだけで公開されます。
 
 1. `main` へプッシュすると GitHub Actions の `Pages` ワークフローが起動します。
-2. ワークフロー内でテスト、5曲の事前運指プラン生成、ビルドが実行されます。
+2. ワークフロー内でテスト、9曲の事前運指プラン生成、ビルドが実行されます。
 3. ビルド成果物が GitHub Pages へ公開されます。
 
 Pages の設定は **Settings → Pages → Source: GitHub Actions** です。公開URLは https://asoka501.github.io/Git_classic/ で、相対パス設定のためリポジトリ名に依存せず動作します。

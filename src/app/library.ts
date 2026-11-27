@@ -1,9 +1,13 @@
-// 収録曲ライブラリ：5曲のクラシック・ピアノ名曲をビルド時にインライン化して同梱します。
+// 収録曲ライブラリ：9曲のクラシック・ピアノ名曲をビルド時にインライン化して同梱します。
 import fantaisieImpromptu from '../music/chopin-fantaisie-impromptu.mid?inline';
 import laChevaleresque from '../music/burgmuller-la-chevaleresque.mid?inline';
 import golliwoggsCakewalk from '../music/debussy-golliwoggs-cakewalk.mid?inline';
 import arabesque from '../music/burgmuller-arabesque.mid?inline';
+import newWorld from '../music/dvorak-new-world.mid?inline';
+import vivaldiWinter from '../music/vivaldi-winter.mid?inline';
 import funiculiFunicula from '../music/denza-funiculi-funicula.mid?inline';
+import moonlight3 from '../music/beethoven-moonlight-3.mid?inline';
+import laCampanella from '../music/liszt-la-campanella.mid?inline';
 import extra from 'virtual:extra-music';
 
 export type LibraryGroup = 'Original' | 'Classical' | 'Songs';
@@ -32,7 +36,7 @@ function fromDataUrl(url: string): () => Uint8Array {
   };
 }
 
-/** 収録曲一覧（プログラム順） */
+/** 収録曲一覧（プログラム順・全9曲） */
 const BUILT_IN: LibraryEntry[] = [
   {
     id: 'fantaisie-impromptu',
@@ -75,6 +79,26 @@ const BUILT_IN: LibraryEntry[] = [
     bytes: fromDataUrl(arabesque),
   },
   {
+    id: 'new-world',
+    title: '交響曲第9番「新世界より」',
+    artist: 'Antonín Dvořák',
+    year: '1893',
+    group: 'Classical',
+    style: 'golden',
+    blurb: '第2楽章ラルゴ（「家路」）。夕暮れの郷愁と静かな祈りを湛えた名旋律のピアノソロ編。',
+    bytes: fromDataUrl(newWorld),
+  },
+  {
+    id: 'vivaldi-winter',
+    title: '四季より「冬」',
+    artist: 'Antonio Vivaldi',
+    year: '1725',
+    group: 'Classical',
+    style: 'noir-cyan',
+    blurb: 'ヴァイオリン協奏曲『四季』作品8 第4番 第1楽章。凍てつく風と鋭い刻みが疾走するバロックの名作ピアノ編。',
+    bytes: fromDataUrl(vivaldiWinter),
+  },
+  {
     id: 'funiculi-funicula',
     title: 'フニクリ・フニクラ',
     artist: 'Luigi Denza',
@@ -83,6 +107,26 @@ const BUILT_IN: LibraryEntry[] = [
     style: 'golden',
     blurb: 'ヴェスヴィオ火山の登山鉄道開通を記念して作られた陽気なナポリ民謡のピアノソロ編。',
     bytes: fromDataUrl(funiculiFunicula),
+  },
+  {
+    id: 'moonlight-3',
+    title: '月光ソナタ 第3楽章',
+    artist: 'Ludwig van Beethoven',
+    year: '1801',
+    group: 'Classical',
+    style: 'moonlight',
+    blurb: 'ピアノ・ソナタ第14番 嬰ハ短調 作品27-2 第3楽章 Presto agitato。嵐のように駆け上がる分散和音と激しい情熱の傑作。',
+    bytes: fromDataUrl(moonlight3),
+  },
+  {
+    id: 'la-campanella',
+    title: 'ラ・カンパネラ',
+    artist: 'Franz Liszt',
+    year: '1851',
+    group: 'Classical',
+    style: 'noir-cyan',
+    blurb: '『パガニーニによる大練習曲』第3番 嬰ト短調。高音域に澄んだ鐘の音が響き渡る超絶技巧の名曲。',
+    bytes: fromDataUrl(laCampanella),
   },
 ];
 
