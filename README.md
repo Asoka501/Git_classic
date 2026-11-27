@@ -8,7 +8,7 @@ MIDIを2本のロボットハンドがリアルタイムに演奏する、3Dピ�
 
 ## 収録曲（デフォルト起動曲：幻想即興曲）
 
-選曲すると、その曲に合わせたビジュアルスタイルが自動で適用されます。
+選曲すると、その曲に合わせたビジュアルスタイルが自動で適用されます。曲が終わるとライブラリの次の曲が自動で演奏されます（最後の曲の次は先頭に戻ります）。
 
 | No. | 曲名 | 作曲家 | 自動スタイル | 収録MIDI出典 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -16,11 +16,11 @@ MIDIを2本のロボットハンドがリアルタイムに演奏する、3Dピ�
 | 02 | 貴婦人の乗馬 | Friedrich Burgmüller (1851) | Studio | [BitMidi](https://bitmidi.com/study-no-25-la-chevaleresque-opus-100-mid) |
 | 03 | ゴリウォーグのケークウォーク | Claude Debussy (1908) | Golden hour | [BitMidi](https://bitmidi.com/golliwogs-cake-walk-mid) |
 | 04 | アラベスク（Op.100-2） | Friedrich Burgmüller (1851) | Faded film | [Mutopia Project](https://www.mutopiaproject.org/ftp/BurgmullerJFF/O100/25EF-02/25EF-02.mid)（Public Domain） |
-| 05 | 交響曲第9番「新世界より」第4楽章 | Antonín Dvořák (1893) | Golden hour | — |
-| 06 | 四季より「冬」第1楽章 | Antonio Vivaldi (1725) | Noir cyan | — |
+| 05 | 交響曲第9番「新世界より」第4楽章 | Antonín Dvořák (1893) | Velvet hall | — |
+| 06 | 四季より「冬」第1楽章 | Antonio Vivaldi (1725) | Winter frost | — |
 | 07 | 月光ソナタ 第3楽章 | Ludwig van Beethoven (1801) | Moonlight | — |
-| 08 | ラ・カンパネラ | Franz Liszt (1851) | Noir cyan | — |
-| 09 | フニクリ・フニクラ | Luigi Denza (1880) | Golden hour | [BitMidi](https://bitmidi.com/funicula-mid)（ピアノソロ2トラックに整形） |
+| 08 | ラ・カンパネラ | Franz Liszt (1851) | Bell crystal | — |
+| 09 | フニクリ・フニクラ | Luigi Denza (1880) | Napoli sun | [BitMidi](https://bitmidi.com/funicula-mid)（ピアノソロ2トラックに整形） |
 
 ※ ブラウザ上の「ライブラリ」または画面へのドラッグ＆ドロップで、お手元の `.mid` ファイルも追加演奏できます。
 

@@ -104,6 +104,7 @@ app
   .then(() => {
     const ui = new AppUI(app, document.getElementById('ui') as HTMLElement);
     ui.build();
+    if (app.params.get('ui') !== '0' && app.params.get('play') !== '0') void app.play();
     loader.classList.add('done');
     setTimeout(() => loader.remove(), 1600);
   })

@@ -240,7 +240,7 @@ const SHOTS: Shot[] = [
     id: 'wide-stage',
     name: 'Wide: Stage overview (C)',
     scale: 'wide',
-    fit: (f) => (f.first ? -1 : 0.35 + 0.45 * f.intensity),
+    fit: (f) => (f.first ? -1 : 1.18 + 0.55 * f.intensity),
     frame(ctx, t, s) {
       // 案C：正面高所からの俯瞰ワイド（全体像＋空間ネオン音符＋前腕隠し）
       const u = ease((t - s.a) / (s.b - s.a));
@@ -254,7 +254,7 @@ const SHOTS: Shot[] = [
     id: 'establishing',
     name: 'Establishing',
     scale: 'wide',
-    fit: (f) => (f.first ? 0 : 0.2 - f.intensity),
+    fit: (f) => (f.first ? 0 : 1.05 + 0.4 * (1 - f.intensity)),
     frame(ctx, t, s) {
       // a crane down from high over the player's place: from the score on the
       // desk and the piano's face, tilting down to the hands; the forearms run
@@ -285,7 +285,7 @@ const SHOTS: Shot[] = [
     id: 'rise',
     name: 'Crane up',
     scale: 'wide',
-    fit: (f) => 0.4 + 0.6 * f.intensity - (f.length < 4 ? 1 : 0),
+    fit: (f) => (f.first ? -1 : 1.08 + 0.55 * f.intensity - (f.length < 3.5 ? 0.45 : 0)),
     frame(ctx, t, s) {
       const u = ease((t - s.a) / (s.b - s.a));
       const c = subject(ctx, 'both', t, s, 0.4);
@@ -309,7 +309,7 @@ const SHOTS: Shot[] = [
     id: 'overhead-crane',
     name: 'Overhead, turning',
     scale: 'wide',
-    fit: (f) => 0.5 + Math.min(1, f.span / 0.5) * 0.6,
+    fit: (f) => (f.first ? -1 : 1.15 + Math.min(1, f.span / 0.5) * 0.55),
     frame(ctx, t, s) {
       const u = ease((t - s.a) / (s.b - s.a));
       const c = subject(ctx, 'both', t, s, 0.4);
@@ -722,6 +722,7 @@ export class ShotDirector {
         if (!isFinite(sc)) continue;
         const ago = recent.lastIndexOf(shot.id);
         if (ago >= 0) sc -= ago === recent.length - 1 ? 100 : 1.6 / (recent.length - ago);
+        if (shot.scale === 'wide' && prevScale !== 'wide') sc += 0.35;
         if (prevScale) {
           const d = Math.abs(SCALE_ORDER.indexOf(shot.scale) - SCALE_ORDER.indexOf(prevScale));
           sc += d === 0 ? -0.6 : d === 1 ? 0.25 : d === 2 ? 0.1 : -0.2; // move one or two steps in scale
